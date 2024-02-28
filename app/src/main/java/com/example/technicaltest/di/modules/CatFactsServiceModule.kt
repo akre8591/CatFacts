@@ -1,4 +1,4 @@
-package com.example.technicaltest.di.services
+package com.example.technicaltest.di.modules
 
 import com.example.technicaltest.remote.api.CatFactsService
 import dagger.Module
