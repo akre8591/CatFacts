@@ -24,5 +24,4 @@ object DatabaseModule {
         ).allowMainThreadQueries()
             .fallbackToDestructiveMigration()
             .build()
-
 }
