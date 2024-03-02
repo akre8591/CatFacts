@@ -33,7 +33,7 @@ class CatFactsRepositoryImpl @Inject constructor(
             }
         }
         val localCatFacts = catFactsDao.getCatFacts().firstOrNull()
-        if (localCatFacts != null) {
+        if (!localCatFacts.isNullOrEmpty()) {
             emit(CatFactsScreenUiState.Success(localCatFacts.toDomain()))
         } else {
             emit(CatFactsScreenUiState.Error(NO_FOUND_IN_CACHE))

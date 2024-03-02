@@ -42,7 +42,7 @@ fun CatFactsScreen(
         }
 
         is CatFactsScreenUiState.Success -> {
-            CatFactsListComponent(catFactsList = uiState.funCats)
+            CatFactsListComponent(catFactsList = uiState.catFacts)
         }
 
         is CatFactsScreenUiState.Error -> {
