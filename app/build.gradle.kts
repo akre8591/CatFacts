@@ -1,11 +1,91 @@
+import com.android.build.gradle.internal.tasks.factory.dependsOn
+import java.util.Locale
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
+    jacoco
+}
+
+val jacocoTestReport = tasks.register("jacocoTestReport")
+
+tasks.withType<Test> {
+    configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
 }
 
 android {
+
+    applicationVariants.all {
+        val testTaskName = "test${
+            this.name.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(
+                    Locale.US
+                ) else it.toString()
+            }
+        }UnitTest"
+
+        val excludes = listOf(
+            // Android
+            "**/R.class",
+            "**/R\$*.class",
+            "**/BuildConfig.*",
+            "**/Manifest*.*",
+            "**/*Test*.*",
+            "android/**/*.*",
+            "**/*Binding.class",
+            "**/*Binding*.*",
+            "**/*Dao_Impl*.class",
+            "**/*Args.class",
+            "**/*Args.Builder.class",
+            "**/*Directions*.class",
+            "**/*Creator.class",
+            "**/*Builder.class"
+        )
+
+        val reportTask = tasks.register(
+            "jacoco${
+                testTaskName.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+                }
+            }Report", JacocoReport::class
+        ) {
+            group = "Reporting"
+            description = "Generate Jacoco coverage reports for the ${
+                testTaskName.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+                }
+            } build."
+            dependsOn(testTaskName)
+
+            reports {
+                xml.required.set(true)
+                html.required.set(true)
+            }
+
+            classDirectories.setFrom(
+                files(
+                    fileTree(javaCompileProvider.get().destinationDirectory) {
+                        exclude(excludes)
+                    },
+                    fileTree("$buildDir/tmp/kotlin-classes/${this.name}") {
+                        exclude(excludes)
+                    }
+                )
+            )
+
+            // Code underneath /src/{variant}/kotlin will also be picked up here
+            sourceDirectories.setFrom(sourceSets.flatMap { it.javaDirectories })
+            executionData.setFrom(file("$buildDir/jacoco/$testTaskName.exec"))
+        }
+
+        jacocoTestReport.dependsOn(reportTask)
+    }
+
     namespace = "com.example.technicaltest"
     compileSdk = 34
 
@@ -51,9 +131,8 @@ android {
     }
 
     testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
+        unitTests.isIncludeAndroidResources = true
+        unitTests.isReturnDefaultValues = true
     }
 }
 
