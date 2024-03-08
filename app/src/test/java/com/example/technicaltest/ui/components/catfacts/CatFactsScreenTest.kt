@@ -1,5 +1,6 @@
 package com.example.technicaltest.ui.components.catfacts
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -10,6 +11,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
+@ExperimentalMaterialApi
 @RunWith(RobolectricTestRunner::class)
 class CatFactsScreenTest {
 
@@ -32,7 +34,9 @@ class CatFactsScreenTest {
             TechnicalTestTheme {
                 CatFactsScreen(
                     navigateTo = navigateTo,
-                    uiState = catFactsScreenUiState
+                    uiState = catFactsScreenUiState,
+                    refresh = { },
+                    isRefreshing = false
                 )
             }
         }

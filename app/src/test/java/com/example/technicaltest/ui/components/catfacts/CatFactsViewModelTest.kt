@@ -4,11 +4,13 @@ import app.cash.turbine.test
 import com.example.technicaltest.data.domain.model.CatFactsModel
 import com.example.technicaltest.fakeclasses.FakeCatFactsRepository
 import com.example.technicaltest.utils.MainDispatcherRule
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class CatFactsViewModelTest {
 
     @get:Rule
