@@ -110,6 +110,12 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        debug {
+            isMinifyEnabled = false
+            isDebuggable = true
+            enableAndroidTestCoverage = true
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -131,8 +137,18 @@ android {
     }
 
     testOptions {
-        unitTests.isIncludeAndroidResources = true
-        unitTests.isReturnDefaultValues = true
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+        }
+    }
+
+    ktlint {
+        filter {
+            exclude("**/generated/**")
+            exclude("build.gradle.kts")
+            include("**/kotlin/**")
+        }
     }
 }
 

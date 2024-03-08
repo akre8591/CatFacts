@@ -17,18 +17,17 @@ import javax.inject.Inject
 
 class NetworkApiImpl @Inject constructor(@ApplicationContext val context: Context) : NetworkApi {
 
-    private val connectivityManager: ConnectivityManager
-            by lazy { context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager }
+    private val connectivityManager: ConnectivityManager by lazy { context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager }
 
-    private val wifiManager: WifiManager
-            by lazy { context.getSystemService(Context.WIFI_SERVICE) as WifiManager }
+    private val wifiManager: WifiManager by lazy { context.getSystemService(Context.WIFI_SERVICE) as WifiManager }
 
     private val mobileNetwork: TelephonyManager by lazy { context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager }
 
     override fun isNetworkAvailable(): Boolean {
         return getActiveNetworkCapabilities()?.let {
-            it.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-                    it.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+            it.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) && it.hasCapability(
+                NetworkCapabilities.NET_CAPABILITY_VALIDATED
+            )
         } ?: false
     }
 
