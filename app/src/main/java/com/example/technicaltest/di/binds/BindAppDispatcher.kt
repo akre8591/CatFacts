@@ -1,7 +1,7 @@
 package com.example.technicaltest.di.binds
 
-import com.example.technicaltest.di.AppDispatcher
-import com.example.technicaltest.di.AppDispatcherImpl
+import com.example.technicaltest.utils.AppDispatcher
+import com.example.technicaltest.utils.AppDispatcherImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

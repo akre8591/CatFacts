@@ -1,4 +1,4 @@
-package com.example.technicaltest.di
+package com.example.technicaltest.utils
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

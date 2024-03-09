@@ -1,6 +1,5 @@
 package com.example.technicaltest.utils
 
-import com.example.technicaltest.di.AppDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher

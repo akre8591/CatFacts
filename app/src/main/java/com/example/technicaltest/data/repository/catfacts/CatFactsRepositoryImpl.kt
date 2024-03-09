@@ -1,6 +1,6 @@
 package com.example.technicaltest.data.repository.catfacts
 
-import com.example.technicaltest.di.AppDispatcher
+import com.example.technicaltest.utils.AppDispatcher
 import com.example.technicaltest.local.dao.CatFactsDao
 import com.example.technicaltest.local.model.toDomain
 import com.example.technicaltest.remote.api.CatFactsService
