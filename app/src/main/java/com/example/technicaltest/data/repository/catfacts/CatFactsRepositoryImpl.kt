@@ -1,11 +1,11 @@
 package com.example.technicaltest.data.repository.catfacts
 
-import com.example.technicaltest.utils.AppDispatcher
 import com.example.technicaltest.local.dao.CatFactsDao
 import com.example.technicaltest.local.model.toDomain
 import com.example.technicaltest.remote.api.CatFactsService
 import com.example.technicaltest.remote.model.toCache
 import com.example.technicaltest.ui.components.catfacts.CatFactsScreenUiState
+import com.example.technicaltest.utils.AppDispatcher
 import com.example.technicaltest.utils.Constants.NO_FOUND_IN_CACHE
 import com.example.technicaltest.utils.Constants.UNEXPECTED_ERROR
 import com.example.technicaltest.utils.NetworkApi
