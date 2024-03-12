@@ -2,7 +2,7 @@ package com.example.technicaltest.ui.components.catfacts
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.technicaltest.data.repository.catfacts.CatFactsRepository
+import com.example.technicaltest.data.domain.interactor.GetCatFactsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,14 +15,14 @@ import javax.inject.Inject
 @HiltViewModel
 @ExperimentalCoroutinesApi
 class CatFactsViewModel @Inject constructor(
-    catFactsRepository: CatFactsRepository
+    getCatFactsUseCase: GetCatFactsUseCase
 ) : ViewModel() {
 
     private val forceToRefresh: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     val uiState: StateFlow<CatFactsScreenUiState> = forceToRefresh.flatMapLatest {
-        catFactsRepository.getCatFacts()
+        getCatFactsUseCase()
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,

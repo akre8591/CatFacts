@@ -1,14 +1,17 @@
 package com.example.technicaltest.ui.components.catfacts
 
 import app.cash.turbine.test
+import com.example.technicaltest.data.domain.interactor.GetCatFactsUseCase
 import com.example.technicaltest.data.domain.model.CatFactsModel
 import com.example.technicaltest.fakeclasses.FakeCatFactsRepository
+import com.example.technicaltest.utils.DataState
 import com.example.technicaltest.utils.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.lang.Exception
 
 @ExperimentalCoroutinesApi
 class CatFactsViewModelTest {
@@ -29,7 +32,12 @@ class CatFactsViewModelTest {
 
     @Before
     fun setup() {
-        sut = CatFactsViewModel(catFactsRepository = catFactsRepository)
+        sut =
+            CatFactsViewModel(
+                getCatFactsUseCase = GetCatFactsUseCase(
+                    catFactsRepository = catFactsRepository
+                )
+            )
     }
 
     @Test
@@ -42,7 +50,7 @@ class CatFactsViewModelTest {
     fun `uiState is success`() = runTest {
         sut.uiState.test {
             assert(awaitItem() is CatFactsScreenUiState.Loading)
-            catFactsRepository.catFacts.emit(CatFactsScreenUiState.Success(catFactsModel))
+            catFactsRepository.catFacts.emit(DataState.Success(catFactsModel))
             assert(awaitItem() is CatFactsScreenUiState.Success)
         }
     }
@@ -51,7 +59,7 @@ class CatFactsViewModelTest {
     fun `uiState is error`() = runTest {
         sut.uiState.test {
             assert(awaitItem() is CatFactsScreenUiState.Loading)
-            catFactsRepository.catFacts.emit(CatFactsScreenUiState.Error("Error Message"))
+            catFactsRepository.catFacts.emit(DataState.Failure(Exception("Error message")))
             assert(awaitItem() is CatFactsScreenUiState.Error)
         }
     }

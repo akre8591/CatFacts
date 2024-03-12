@@ -6,7 +6,7 @@ import com.example.technicaltest.fakeclasses.FakeCatFactsService
 import com.example.technicaltest.fakeclasses.FakeNetworkApi
 import com.example.technicaltest.local.model.CatFactsCacheModel
 import com.example.technicaltest.remote.model.CatFactsResponseModel
-import com.example.technicaltest.ui.components.catfacts.CatFactsScreenUiState
+import com.example.technicaltest.utils.DataState
 import com.example.technicaltest.utils.MainDispatcherRule
 import com.example.technicaltest.utils.TestDispatcherImpl
 import com.skydoves.sandwich.ApiResponse
@@ -57,8 +57,8 @@ class CatFactsRepositoryImplTest {
         networkApi.networkAvailable = false
         catFactsDao.insertCatFacts(catFactsCacheModel)
         sut.getCatFacts().test {
-            assert(awaitItem() is CatFactsScreenUiState.Loading)
-            assert(awaitItem() is CatFactsScreenUiState.Success)
+            assert(awaitItem() is DataState.Progress)
+            assert(awaitItem() is DataState.Success)
             awaitComplete()
         }
     }
@@ -73,8 +73,8 @@ class CatFactsRepositoryImplTest {
                 )
             }
             sut.getCatFacts().test {
-                assert(awaitItem() is CatFactsScreenUiState.Loading)
-                assert(awaitItem() is CatFactsScreenUiState.Success)
+                assert(awaitItem() is DataState.Progress)
+                assert(awaitItem() is DataState.Success)
                 awaitComplete()
             }
         }
@@ -85,9 +85,9 @@ class CatFactsRepositoryImplTest {
             networkApi.networkAvailable = true
             catFactsService.catFactsResponse = ApiResponse.error(TimeoutException())
             sut.getCatFacts().test {
-                assert(awaitItem() is CatFactsScreenUiState.Loading)
-                assert(awaitItem() is CatFactsScreenUiState.Error)
-                assert(awaitItem() is CatFactsScreenUiState.Error)
+                assert(awaitItem() is DataState.Progress)
+                assert(awaitItem() is DataState.Failure)
+                assert(awaitItem() is DataState.Failure)
                 awaitComplete()
             }
         }
