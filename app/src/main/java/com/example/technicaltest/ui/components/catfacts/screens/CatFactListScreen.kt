@@ -61,7 +61,9 @@ fun CatFactListScreen(
         is CatFactsScreenUiState.Success -> {
             val pullRefreshState = rememberPullRefreshState(isRefreshing, refresh)
             Box(
-                modifier = Modifier.pullRefresh(state = pullRefreshState)
+                modifier = Modifier
+                    .testTag(TestConstants.CAT_FACT_LIST)
+                    .pullRefresh(state = pullRefreshState)
             ) {
                 CatFactsListComponent(
                     catFactsList = uiState.catFacts,
@@ -77,7 +79,9 @@ fun CatFactListScreen(
 
         is CatFactsScreenUiState.Error -> {
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .testTag(TestConstants.CAT_FACTS_ERROR)
+                    .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 Text(text = uiState.message)

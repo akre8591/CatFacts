@@ -17,7 +17,8 @@ fun MainNavigation(
         startDestination = NavigationDestinations.LIST_ROUTE,
         modifier = modifier
     ) {
-        catFactListNavGraph(navController = navController)
-        catFactDetailsNavGraph()
+        catFactListNavGraph(navController = navController) {
+            catFactDetailsNavGraph()
+        }
     }
 }

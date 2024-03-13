@@ -12,7 +12,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalCoroutinesApi::class)
 fun NavGraphBuilder.catFactListNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    nestedGraphs: NavGraphBuilder.() -> Unit
 ) {
     navigation(
         startDestination = NavigationDestinations.LIST_SCREEN,
@@ -22,5 +23,6 @@ fun NavGraphBuilder.catFactListNavGraph(
         composable(NavigationDestinations.LIST_SCREEN) {
             CatFactListRoute(navigateTo = navController::navigateTo)
         }
+        nestedGraphs()
     }
 }
