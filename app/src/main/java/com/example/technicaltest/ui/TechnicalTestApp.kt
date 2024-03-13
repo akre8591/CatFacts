@@ -14,9 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.technicaltest.R
 import com.example.technicaltest.navigation.MainNavigation
 import com.example.technicaltest.navigation.NavigationDestinations.LIST_ROUTE
 import com.example.technicaltest.ui.theme.TechnicalTestTheme
@@ -35,12 +37,16 @@ fun TechnicalTestApp() {
             topBar = {
                 CenterAlignedTopAppBar(
                     title = {
-                        Text(text = "Technical Test App", color = Color.White)
+                        Text(text = stringResource(id = R.string.app_title), color = Color.White)
                     },
                     navigationIcon = {
                         if (displayNavigationICon) {
                             IconButton(onClick = navController::goBack) {
-                                Icon(Icons.Filled.ArrowBack, "backIcon")
+                                Icon(
+                                    imageVector = Icons.Filled.ArrowBack,
+                                    contentDescription = "backIcon",
+                                    tint = Color.White
+                                )
                             }
                         }
                     },
