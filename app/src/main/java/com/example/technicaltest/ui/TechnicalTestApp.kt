@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.technicaltest.navigation.MainNavigation
 import com.example.technicaltest.navigation.NavigationDestinations.LIST_ROUTE
 import com.example.technicaltest.ui.theme.TechnicalTestTheme
+import com.example.technicaltest.utils.goBack
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,7 +39,7 @@ fun TechnicalTestApp() {
                     },
                     navigationIcon = {
                         if (displayNavigationICon) {
-                            IconButton(onClick = { }) {
+                            IconButton(onClick = navController::goBack) {
                                 Icon(Icons.Filled.ArrowBack, "backIcon")
                             }
                         }

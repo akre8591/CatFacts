@@ -1,4 +1,4 @@
-package com.example.technicaltest.ui.components.catfacts
+package com.example.technicaltest.ui.components.catfacts.states
 
 import com.example.technicaltest.data.domain.model.CatFactsModel
 

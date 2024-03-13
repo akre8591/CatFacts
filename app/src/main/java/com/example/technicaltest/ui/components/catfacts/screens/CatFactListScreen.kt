@@ -1,4 +1,4 @@
-package com.example.technicaltest.ui.components.catfacts
+package com.example.technicaltest.ui.components.catfacts.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,23 +15,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
+import com.example.technicaltest.ui.components.catfacts.states.CatFactsScreenUiState
+import com.example.technicaltest.ui.components.catfacts.viewmodels.CatFactsViewModel
 import com.example.technicaltest.utils.TestConstants
-import com.example.technicaltest.utils.navigateTo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @ExperimentalMaterialApi
 @Composable
-fun CatFactsRoute(
-    navController: NavHostController,
+fun CatFactListRoute(
+    navigateTo: (String) -> Unit,
     viewModel: CatFactsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
 
-    CatFactsScreen(
-        navigateTo = navController::navigateTo,
+    CatFactListScreen(
+        navigateTo = navigateTo,
         uiState = uiState,
         refresh = viewModel::refresh,
         isRefreshing = isRefreshing
@@ -40,7 +40,7 @@ fun CatFactsRoute(
 
 @ExperimentalMaterialApi
 @Composable
-fun CatFactsScreen(
+fun CatFactListScreen(
     navigateTo: (String) -> Unit,
     uiState: CatFactsScreenUiState,
     refresh: () -> Unit,
@@ -63,11 +63,14 @@ fun CatFactsScreen(
             Box(
                 modifier = Modifier.pullRefresh(state = pullRefreshState)
             ) {
-                CatFactsListComponent(catFactsList = uiState.catFacts)
+                CatFactsListComponent(
+                    catFactsList = uiState.catFacts,
+                    navigateTo = navigateTo
+                )
                 PullRefreshIndicator(
-                    isRefreshing,
-                    pullRefreshState,
-                    Modifier.align(Alignment.TopCenter)
+                    refreshing = isRefreshing,
+                    state = pullRefreshState,
+                    modifier = Modifier.align(Alignment.TopCenter)
                 )
             }
         }

@@ -18,3 +18,7 @@ fun NavHostController.navigateTo(screenRoute: String) {
         restoreState = true
     }
 }
+
+fun NavHostController.goBack() {
+    popBackStack()
+}

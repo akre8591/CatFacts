@@ -4,7 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.example.technicaltest.navigation.graph.listGraph
+import com.example.technicaltest.navigation.graph.catFactDetailsNavGraph
+import com.example.technicaltest.navigation.graph.catFactListNavGraph
 
 @Composable
 fun MainNavigation(
@@ -16,7 +17,7 @@ fun MainNavigation(
         startDestination = NavigationDestinations.LIST_ROUTE,
         modifier = modifier
     ) {
-        listGraph(navController = navController, nestedGraphs = {
-        })
+        catFactListNavGraph(navController = navController)
+        catFactDetailsNavGraph()
     }
 }

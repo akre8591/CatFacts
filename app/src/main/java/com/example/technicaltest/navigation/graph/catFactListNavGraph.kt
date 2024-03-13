@@ -6,12 +6,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.technicaltest.navigation.NavigationDestinations
-import com.example.technicaltest.ui.components.catfacts.CatFactsRoute
+import com.example.technicaltest.ui.components.catfacts.screens.CatFactListRoute
+import com.example.technicaltest.utils.navigateTo
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@OptIn(ExperimentalMaterialApi::class)
-fun NavGraphBuilder.listGraph(
-    navController: NavHostController,
-    nestedGraphs: NavGraphBuilder.() -> Unit
+@OptIn(ExperimentalMaterialApi::class, ExperimentalCoroutinesApi::class)
+fun NavGraphBuilder.catFactListNavGraph(
+    navController: NavHostController
 ) {
     navigation(
         startDestination = NavigationDestinations.LIST_SCREEN,
@@ -19,9 +20,7 @@ fun NavGraphBuilder.listGraph(
     ) {
 
         composable(NavigationDestinations.LIST_SCREEN) {
-            CatFactsRoute(navController)
+            CatFactListRoute(navigateTo = navController::navigateTo)
         }
-
-        nestedGraphs()
     }
 }

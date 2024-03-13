@@ -1,7 +1,7 @@
 package com.example.technicaltest.data.domain.interactor
 
 import com.example.technicaltest.data.repository.catfacts.CatFactsRepository
-import com.example.technicaltest.ui.components.catfacts.CatFactsScreenUiState
+import com.example.technicaltest.ui.components.catfacts.states.CatFactsScreenUiState
 import com.example.technicaltest.utils.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

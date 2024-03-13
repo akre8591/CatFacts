@@ -1,6 +1,7 @@
-package com.example.technicaltest.ui.components.catfacts
+package com.example.technicaltest.ui.components.catfacts.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,10 +14,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.technicaltest.data.domain.model.CatFactsModel
+import com.example.technicaltest.navigation.NavigationDestinations
 
 @Composable
-fun CatFactItemComponent(catFact: CatFactsModel) {
-    Column(modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp)) {
+fun CatFactItemComponent(
+    catFact: CatFactsModel,
+    navigateTo: (String) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .padding(vertical = 16.dp, horizontal = 24.dp)
+            .clickable {
+                navigateTo("${NavigationDestinations.DETAILS_ROUTE}/${catFact.id}")
+            }
+    ) {
         Text(
             text = catFact.type,
             fontSize = 24.sp

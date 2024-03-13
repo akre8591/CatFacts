@@ -4,6 +4,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import com.example.technicaltest.ui.components.catfacts.screens.CatFactListScreen
+import com.example.technicaltest.ui.components.catfacts.states.CatFactsScreenUiState
 import com.example.technicaltest.ui.theme.TechnicalTestTheme
 import com.example.technicaltest.utils.TestConstants
 import org.junit.Rule
@@ -32,7 +34,7 @@ class CatFactsScreenTest {
     ) {
         composeTestRule.setContent {
             TechnicalTestTheme {
-                CatFactsScreen(
+                CatFactListScreen(
                     navigateTo = navigateTo,
                     uiState = catFactsScreenUiState,
                     refresh = { },

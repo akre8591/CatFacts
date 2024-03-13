@@ -4,6 +4,8 @@ import app.cash.turbine.test
 import com.example.technicaltest.data.domain.interactor.GetCatFactsUseCase
 import com.example.technicaltest.data.domain.model.CatFactsModel
 import com.example.technicaltest.fakeclasses.FakeCatFactsRepository
+import com.example.technicaltest.ui.components.catfacts.states.CatFactsScreenUiState
+import com.example.technicaltest.ui.components.catfacts.viewmodels.CatFactsViewModel
 import com.example.technicaltest.utils.DataState
 import com.example.technicaltest.utils.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
