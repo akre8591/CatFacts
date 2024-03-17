@@ -33,26 +33,52 @@ android {
 
         val excludes = listOf(
             // Android
+            "**/databinding/*Binding.*",
             "**/R.class",
-            "**/R\$*.class",
-            "**/*\$ViewInjector*.*",
-            "**/*\$ViewBinder*.*",
-            "**/Lambda\$*.class",
-            "**/*\$ViewInjector*.*",
-            "**/*\$ViewBinder*.*",
-            "**/*\$Lambda$*.*",
+            "**/R$*.class",
             "**/BuildConfig.*",
             "**/Manifest*.*",
             "**/*Test*.*",
             "android/**/*.*",
-            "**/*Binding.class",
-            "**/*Binding*.*",
-            "**/*Dao_Impl*.class",
-            "**/*Args.class",
-            "**/*Args.Builder.class",
-            "**/*Directions*.class",
-            "**/*Creator.class",
-            "**/*Builder.class"
+            "dagger/hilt/internal/aggregatedroot/codegen/*.*",
+            // butterKnife
+            "**/*\$ViewInjector*.*",
+            "**/*\$ViewBinder*.*",
+            "**/Lambda$*.class",
+            "**/Lambda.class",
+            "**/*Lambda.class",
+            "**/*Lambda*.class",
+            "**/*_MembersInjector.class",
+            "**/Dagger*Component*.*",
+            "**/*Module_*Factory.class",
+            "**/di/module/*",
+            "**/*_Factory*.*",
+            "**/*Module*.*",
+            "**/*Dagger*.*",
+            "**/*Hilt*.*",
+            // kotlin
+            "**/*MapperImpl*.*",
+            "**/*\$ViewInjector*.*",
+            "**/*\$ViewBinder*.*",
+            "**/BuildConfig.*",
+            "**/*Component*.*",
+            "**/*BR*.*",
+            "**/Manifest*.*",
+            "**/*\$Lambda$*.*",
+            "**/*Companion*.*",
+            "**/*Module*.*",
+            "**/*Dagger*.*",
+            "**/*Hilt*.*",
+            "**/*MembersInjector*.*",
+            "**/*_MembersInjector.class",
+            "**/*_Factory*.*",
+            "**/*_Impl*.*",
+            "**/*_Bind*.*",
+            "**/*_GeneratedInjector*.*",
+            "**/*_Provide*Factory*.*",
+            "**/*Extensions*.*",
+            "**/*Fake*.*",
+            "**/*Preview*.*"
         )
 
         val reportTask = tasks.register(
@@ -75,20 +101,28 @@ android {
                 html.required.set(true)
             }
 
+            val kotlinClassesPath: Provider<Directory> =
+                layout.buildDirectory.dir("tmp/kotlin-classes/${this.name}")
+
             classDirectories.setFrom(
                 files(
                     fileTree(javaCompileProvider.get().destinationDirectory) {
                         exclude(excludes)
                     },
-                    fileTree("$buildDir/tmp/kotlin-classes/${this.name}") {
+                    fileTree(kotlinClassesPath.get().asFile) {
                         exclude(excludes)
                     }
                 )
             )
 
             // Code underneath /src/{variant}/kotlin will also be picked up here
-            sourceDirectories.setFrom(sourceSets.flatMap { it.javaDirectories })
-            executionData.setFrom(file("$buildDir/jacoco/$testTaskName.exec"))
+            sourceDirectories.setFrom(
+                sourceSets.flatMap { it.javaDirectories },
+                sourceSets.flatMap { it.kotlinDirectories }
+            )
+            val executionDataPath: Provider<Directory> =
+                layout.buildDirectory.dir("jacoco/$testTaskName.exec")
+            executionData.setFrom(executionDataPath.get().asFile)
         }
 
         jacocoTestReport.dependsOn(reportTask)
@@ -113,6 +147,8 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            enableAndroidTestCoverage = false
+            enableUnitTestCoverage = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -122,7 +158,8 @@ android {
         debug {
             isMinifyEnabled = false
             isDebuggable = true
-            enableAndroidTestCoverage = true
+            enableAndroidTestCoverage = false
+            enableUnitTestCoverage = false
         }
     }
     compileOptions {
