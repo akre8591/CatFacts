@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.tasks.factory.dependsOn
 import java.util.Locale
 
 plugins {
@@ -11,14 +10,13 @@ plugins {
 
 jacoco.toolVersion = "0.8.11"
 
-val jacocoTestReport = tasks.register("jacocoTestReport")
-
 tasks.withType<Test> {
     configure<JacocoTaskExtension> {
         isIncludeNoLocationClasses = true
         excludes = listOf("jdk.internal.*")
     }
 }
+
 
 android {
 
@@ -31,8 +29,7 @@ android {
             }
         }UnitTest"
 
-        val excludes = listOf(
-            // Android
+        val fileFilter = mutableSetOf(
             "**/databinding/*Binding.*",
             "**/R.class",
             "**/R$*.class",
@@ -78,54 +75,91 @@ android {
             "**/*_Provide*Factory*.*",
             "**/*Extensions*.*",
             "**/*Fake*.*",
-            "**/*Preview*.*"
+            "**/*Preview*.*",
+            "**/*\$Lambda$*.*", // Jacoco can not handle several "$" in class name.
+            "**/*\$inlined$*.*" // Kotlin specific, Jacoco can not handle several "$" in class name.
         )
 
-        val reportTask = tasks.register(
-            "jacoco${
-                testTaskName.replaceFirstChar {
-                    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
-                }
-            }Report", JacocoReport::class
-        ) {
-            group = "Reporting"
-            description = "Generate Jacoco coverage reports for the ${
-                testTaskName.replaceFirstChar {
-                    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
-                }
-            } build."
-            dependsOn(testTaskName)
+        val kotlinClassesPath: Provider<Directory> =
+            layout.buildDirectory.dir("tmp/kotlin-classes/${this.name}")
 
-            reports {
-                xml.required.set(true)
-                html.required.set(true)
+        val classDirectoriesTree = files(
+            fileTree(javaCompileProvider.get().destinationDirectory) {
+                exclude(fileFilter)
+            },
+            fileTree(kotlinClassesPath.get().asFile) {
+                exclude(fileFilter)
             }
+        )
 
-            val kotlinClassesPath: Provider<Directory> =
-                layout.buildDirectory.dir("tmp/kotlin-classes/${this.name}")
-
-            classDirectories.setFrom(
-                files(
-                    fileTree(javaCompileProvider.get().destinationDirectory) {
-                        exclude(excludes)
-                    },
-                    fileTree(kotlinClassesPath.get().asFile) {
-                        exclude(excludes)
-                    }
-                )
+        val sourceDirectoriesTree = fileTree("${layout.buildDirectory}") {
+            include(
+                "src/main/java/**",
+                "src/main/kotlin/**",
+                "src/debug/java/**",
+                "src/debug/kotlin/**"
             )
-
-            // Code underneath /src/{variant}/kotlin will also be picked up here
-            sourceDirectories.setFrom(
-                sourceSets.flatMap { it.javaDirectories },
-                sourceSets.flatMap { it.kotlinDirectories }
-            )
-            val executionDataPath: Provider<Directory> =
-                layout.buildDirectory.dir("jacoco/$testTaskName.exec")
-            executionData.setFrom(executionDataPath.get().asFile)
         }
 
-        jacocoTestReport.dependsOn(reportTask)
+        val executionDataPath: Provider<Directory> =
+            layout.buildDirectory.dir("jacoco/$testTaskName.exec")
+        val executionDataTree = fileTree(executionDataPath)
+
+        fun JacocoReportsContainer.reports() {
+            xml.required.set(true)
+            html.required.set(true)
+            xml.outputLocation =
+                layout.buildDirectory.file("reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+            html.outputLocation = layout.buildDirectory.dir("reports/jacoco/jacocoTestReport/html")
+        }
+
+        fun JacocoCoverageVerification.setDirectories() {
+            sourceDirectories.setFrom(sourceDirectoriesTree)
+            classDirectories.setFrom(classDirectoriesTree)
+            executionData.setFrom(executionDataTree)
+        }
+
+        fun JacocoReport.setDirectories() {
+            sourceDirectories.setFrom(sourceDirectoriesTree)
+            classDirectories.setFrom(classDirectoriesTree)
+            executionData.setFrom(executionDataTree)
+        }
+
+        val reportTask = "jacoco${
+            testTaskName.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+            }
+        }Report"
+
+        if (tasks.findByName(reportTask) == null) {
+            tasks.register(reportTask, JacocoReport::class) {
+                group = "Reporting"
+                description = "Code coverage report for both Android and Unit tests."
+                dependsOn("testDebugUnitTest")
+                reports {
+                    reports()
+                }
+                setDirectories()
+            }
+        }
+
+        if (tasks.findByName(reportTask) == null) {
+            tasks.register<JacocoCoverageVerification>(reportTask) {
+                group = "Reporting"
+                description = "Code coverage verification for Android both Android and Unit tests."
+                dependsOn("testDebugUnitTest")
+                violationRules {
+                    rule {
+                        limit {
+                            counter = "INSTRUCTIONAL"
+                            value = "COVEREDRATIO"
+                            minimum = "0.5".toBigDecimal()
+                        }
+                    }
+                }
+                setDirectories()
+            }
+        }
     }
 
     namespace = "com.example.technicaltest"
@@ -147,8 +181,6 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            enableAndroidTestCoverage = false
-            enableUnitTestCoverage = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -159,7 +191,6 @@ android {
             isMinifyEnabled = false
             isDebuggable = true
             enableAndroidTestCoverage = false
-            enableUnitTestCoverage = false
         }
     }
     compileOptions {
