@@ -5,5 +5,8 @@ import com.example.technicaltest.utils.DataState
 import kotlinx.coroutines.flow.Flow
 
 interface CatFactsRepository {
+
     fun getCatFacts(): Flow<DataState<List<CatFactsModel>>>
+
+    fun getCatFactDetails(id: String): Flow<DataState<CatFactsModel>>
 }

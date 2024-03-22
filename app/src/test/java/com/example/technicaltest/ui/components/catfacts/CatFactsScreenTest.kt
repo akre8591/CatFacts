@@ -5,8 +5,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import com.example.technicaltest.data.domain.model.CatFactsModel
-import com.example.technicaltest.ui.components.catfacts.screens.CatFactListScreen
-import com.example.technicaltest.ui.components.catfacts.states.CatFactsScreenUiState
+import com.example.technicaltest.ui.catfacts.screens.CatFactListScreen
+import com.example.technicaltest.ui.catfacts.states.CatFactsScreenUiState
 import com.example.technicaltest.ui.theme.TechnicalTestTheme
 import com.example.technicaltest.utils.TestConstants
 import org.junit.Rule

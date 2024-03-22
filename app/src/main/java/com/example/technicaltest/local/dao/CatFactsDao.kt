@@ -15,4 +15,7 @@ interface CatFactsDao {
 
     @Query("SELECT * FROM cat_facts")
     fun getCatFacts(): Flow<List<CatFactsCacheModel>>
+
+    @Query("SELECT * FROM cat_facts WHERE id = :id")
+    fun getCatFactDetails(id: String): Flow<CatFactsCacheModel>
 }

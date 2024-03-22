@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.technicaltest.navigation.NavigationDestinations
-import com.example.technicaltest.ui.components.catfacts.screens.CatFactListRoute
+import com.example.technicaltest.ui.catfacts.screens.CatFactListRoute
 import com.example.technicaltest.utils.navigateTo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 

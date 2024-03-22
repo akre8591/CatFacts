@@ -16,4 +16,8 @@ class FakeCatFactsDao : CatFactsDao {
     override fun getCatFacts(): Flow<List<CatFactsCacheModel>> {
         return flowOf(inMemoryList)
     }
+
+    override fun getCatFactDetails(id: String): Flow<CatFactsCacheModel> {
+        TODO("Not yet implemented")
+    }
 }

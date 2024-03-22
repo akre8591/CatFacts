@@ -4,7 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.technicaltest.navigation.NavigationDestinations
-import com.example.technicaltest.ui.components.catfacts.screens.CatFactDetailsRoute
+import com.example.technicaltest.ui.catfacts.screens.CatFactDetailsRoute
 
 fun NavGraphBuilder.catFactDetailsNavGraph() {
     navigation(

@@ -22,7 +22,7 @@ class CatFactsRepositoryImpl @Inject constructor(
     private val catFactsService: CatFactsService,
     private val catFactsDao: CatFactsDao,
     private val networkApi: NetworkApi,
-    private val appDispatcher: AppDispatcher
+    private val appDispatcher: AppDispatcher,
 ) : CatFactsRepository {
 
     override fun getCatFacts() = flow<DataState<List<CatFactsModel>>> {
@@ -38,6 +38,18 @@ class CatFactsRepositoryImpl @Inject constructor(
         val localCatFacts = catFactsDao.getCatFacts().firstOrNull()
         if (!localCatFacts.isNullOrEmpty()) {
             emit(DataState.Success((localCatFacts.toDomain())))
+        } else {
+            val throwable = Throwable(NO_FOUND_IN_CACHE)
+            emit(DataState.Failure(throwable))
+        }
+    }.onStart {
+        emit(DataState.loading(isLoading = true))
+    }.flowOn(appDispatcher.io())
+
+    override fun getCatFactDetails(id: String) = flow<DataState<CatFactsModel>> {
+        val localCatFactDetails = catFactsDao.getCatFactDetails(id = id).firstOrNull()
+        if (localCatFactDetails != null) {
+            emit(DataState.Success((localCatFactDetails.toDomain())))
         } else {
             val throwable = Throwable(NO_FOUND_IN_CACHE)
             emit(DataState.Failure(throwable))

@@ -1,9 +1,9 @@
-package com.example.technicaltest.ui.components.catfacts.viewmodels
+package com.example.technicaltest.ui.catfacts.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.technicaltest.data.domain.interactor.GetCatFactsUseCase
-import com.example.technicaltest.ui.components.catfacts.states.CatFactsScreenUiState
+import com.example.technicaltest.ui.catfacts.states.CatFactsScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow

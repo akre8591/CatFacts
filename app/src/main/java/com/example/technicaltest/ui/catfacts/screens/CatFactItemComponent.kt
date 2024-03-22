@@ -1,4 +1,4 @@
-package com.example.technicaltest.ui.components.catfacts.screens
+package com.example.technicaltest.ui.catfacts.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -1,4 +1,4 @@
-package com.example.technicaltest.ui.components.catfacts.screens
+package com.example.technicaltest.ui.catfacts.screens
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
