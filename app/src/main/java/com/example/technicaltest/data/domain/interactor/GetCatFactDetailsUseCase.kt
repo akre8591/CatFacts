@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class GetCatFactDetails @Inject constructor(
+class GetCatFactDetailsUseCase @Inject constructor(
     private val catFactsRepository: CatFactsRepository,
 ) {
     operator fun invoke(id: String): Flow<CatFactDetailsScreenUiState> =
