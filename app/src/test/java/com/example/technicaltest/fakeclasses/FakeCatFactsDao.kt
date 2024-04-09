@@ -3,6 +3,7 @@ package com.example.technicaltest.fakeclasses
 import com.example.technicaltest.local.dao.CatFactsDao
 import com.example.technicaltest.local.model.CatFactsCacheModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeCatFactsDao : CatFactsDao {
@@ -18,6 +19,11 @@ class FakeCatFactsDao : CatFactsDao {
     }
 
     override fun getCatFactDetails(id: String): Flow<CatFactsCacheModel> {
-        TODO("Not yet implemented")
+        val details = inMemoryList.firstOrNull { it.id == id }
+        return if (details != null) {
+            flowOf(details)
+        } else {
+            emptyFlow()
+        }
     }
 }

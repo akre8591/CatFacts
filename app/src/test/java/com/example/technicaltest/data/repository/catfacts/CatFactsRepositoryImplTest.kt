@@ -91,4 +91,24 @@ class CatFactsRepositoryImplTest {
                 awaitComplete()
             }
         }
+
+    @Test
+    fun `cat fact details are getting from cache`() = runTest {
+        catFactsDao.insertCatFacts(catFactsCacheModel)
+        sut.getCatFactDetails(id = "1212").test {
+            assert(awaitItem() is DataState.Progress)
+            assert(awaitItem() is DataState.Success)
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun `cat fact details don't get any value from cache`() = runTest {
+        catFactsDao.insertCatFacts(catFactsCacheModel)
+        sut.getCatFactDetails(id = "1217").test {
+            assert(awaitItem() is DataState.Progress)
+            assert(awaitItem() is DataState.Failure)
+            awaitComplete()
+        }
+    }
 }

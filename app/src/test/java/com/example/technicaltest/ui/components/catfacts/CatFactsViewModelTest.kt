@@ -65,4 +65,10 @@ class CatFactsViewModelTest {
             assert(awaitItem() is CatFactsScreenUiState.Error)
         }
     }
+
+    @Test
+    fun `force to refresh`() = runTest {
+        sut.refresh()
+        assert(!sut.isRefreshing.value)
+    }
 }

@@ -11,7 +11,7 @@ import org.junit.Test
 
 class GetCatFactsUseCaseTest {
 
-    lateinit var sut: GetCatFactsUseCase
+    private lateinit var sut: GetCatFactsUseCase
 
     private val catFactsRepository = FakeCatFactsRepository()
 
